@@ -1,1 +1,16 @@
-ewogICJuYW1lIjogIuWBpeW6t+WNoSDCtyDlh4/ohILmiZPljaEiLAogICJzaG9ydF9uYW1lIjogIuWBpeW6t+WNoSIsCiAgImRlc2NyaXB0aW9uIjogIuWHj+iEguS5oOaDr+aJk+WNoe+8muagh+WHhue6v+S9k+mHjei/vei4quOAgeeDremHj+ebruagh+OAgei/kOWKqOiuoeWIku+8jOi2heWHuuagh+WHhue6v+iHquWKqOe7meWHuiA3IOWkqee6oOWBj+aWueahiCIsCiAgInN0YXJ0X3VybCI6ICIuL2luZGV4Lmh0bWwiLAogICJzY29wZSI6ICIuLyIsCiAgImRpc3BsYXkiOiAic3RhbmRhbG9uZSIsCiAgIm9yaWVudGF0aW9uIjogInBvcnRyYWl0IiwKICAiYmFja2dyb3VuZF9jb2xvciI6ICIjRjVGN0YzIiwKICAidGhlbWVfY29sb3IiOiAiIzFGNkU1MiIsCiAgImljb25zIjogWwogICAgeyAic3JjIjogImljb24tMTkyLnBuZyIsICJzaXplcyI6ICIxOTJ4MTkyIiwgInR5cGUiOiAiaW1hZ2UvcG5nIiwgInB1cnBvc2UiOiAiYW55IiB9LAogICAgeyAic3JjIjogImljb24tNTEyLnBuZyIsICJzaXplcyI6ICI1MTJ4NTEyIiwgInR5cGUiOiAiaW1hZ2UvcG5nIiwgInB1cnBvc2UiOiAiYW55IiB9LAogICAgeyAic3JjIjogImljb24tNTEyLnBuZyIsICJzaXplcyI6ICI1MTJ4NTEyIiwgInR5cGUiOiAiaW1hZ2UvcG5nIiwgInB1cnBvc2UiOiAibWFza2FibGUiIH0KICBdCn0K
+{
+  "name": "健康卡 · 减脂打卡",
+  "short_name": "健康卡",
+  "description": "减脂习惯打卡：标准线体重追踪、热量目标、运动计划，超出标准线自动给出 7 天纠偏方案",
+  "start_url": "./index.html",
+  "scope": "./",
+  "display": "standalone",
+  "orientation": "portrait",
+  "background_color": "#F5F7F3",
+  "theme_color": "#1F6E52",
+  "icons": [
+    { "src": "icon-192.png", "sizes": "192x192", "type": "image/png", "purpose": "any" },
+    { "src": "icon-512.png", "sizes": "512x512", "type": "image/png", "purpose": "any" },
+    { "src": "icon-512.png", "sizes": "512x512", "type": "image/png", "purpose": "maskable" }
+  ]
+}
