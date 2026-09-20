@@ -1,1 +1,36 @@
-Y29uc3QgQ0FDSEUgPSAiZnotdjIiOwpjb25zdCBBU1NFVFMgPSBbIi4vIiwgIi4vaW5kZXguaHRtbCIsICIuL21hbmlmZXN0LndlYm1hbmlmZXN0IiwgIi4vaWNvbi0xODAucG5nIiwgIi4vaWNvbi0xOTIucG5nIiwgIi4vaWNvbi01MTIucG5nIl07CgpzZWxmLmFkZEV2ZW50TGlzdGVuZXIoImluc3RhbGwiLCAoZSkgPT4gewogIGUud2FpdFVudGlsKGNhY2hlcy5vcGVuKENBQ0hFKS50aGVuKChjKSA9PiBjLmFkZEFsbChBU1NFVFMpKS50aGVuKCgpID0+IHNlbGYuc2tpcFdhaXRpbmcoKSkpOwp9KTsKCnNlbGYuYWRkRXZlbnRMaXN0ZW5lcigiYWN0aXZhdGUiLCAoZSkgPT4gewogIGUud2FpdFVudGlsKAogICAgY2FjaGVzLmtleXMoKS50aGVuKChrZXlzKSA9PiBQcm9taXNlLmFsbChrZXlzLmZpbHRlcigoaykgPT4gayAhPT0gQ0FDSEUpLm1hcCgoaykgPT4gY2FjaGVzLmRlbGV0ZShrKSkpKS50aGVuKCgpID0+IHNlbGYuY2xpZW50cy5jbGFpbSgpKQogICk7Cn0pOwoKc2VsZi5hZGRFdmVudExpc3RlbmVyKCJmZXRjaCIsIChlKSA9PiB7CiAgaWYgKGUucmVxdWVzdC5tZXRob2QgIT09ICJHRVQiKSByZXR1cm47CiAgY29uc3QgaXNQYWdlID0gZS5yZXF1ZXN0Lm1vZGUgPT09ICJuYXZpZ2F0ZSIgfHwgKGUucmVxdWVzdC5kZXN0aW5hdGlvbiA9PT0gIiIgJiYgZS5yZXF1ZXN0LnVybC5lbmRzV2l0aCgiLyIpKTsKICBpZiAoaXNQYWdlKSB7CiAgICAvKiDpobXpnaLvvJrnvZHnu5zkvJjlhYjvvIznprvnur/lhZzlupXnvJPlrZjvvIjkv53or4Hlj5HniYjlkI7nlKjmiLfog73mi7/liLDmlrDniYjmnKzvvIkgKi8KICAgIGUucmVzcG9uZFdpdGgoCiAgICAgIGZldGNoKGUucmVxdWVzdCkudGhlbigocmVzKSA9PiB7CiAgICAgICAgY29uc3QgY29weSA9IHJlcy5jbG9uZSgpOwogICAgICAgIGNhY2hlcy5vcGVuKENBQ0hFKS50aGVuKChjKSA9PiBjLnB1dChlLnJlcXVlc3QsIGNvcHkpKS5jYXRjaCgoKSA9PiB7fSk7CiAgICAgICAgcmV0dXJuIHJlczsKICAgICAgfSkuY2F0Y2goKCkgPT4gY2FjaGVzLm1hdGNoKGUucmVxdWVzdCwgeyBpZ25vcmVTZWFyY2g6IHRydWUgfSkudGhlbigoaGl0KSA9PiBoaXQgfHwgY2FjaGVzLm1hdGNoKCIuL2luZGV4Lmh0bWwiKSkpCiAgICApOwogICAgcmV0dXJuOwogIH0KICAvKiDluKblk4jluIznmoTotYTmupDvvJrnvJPlrZjkvJjlhYjvvJvlhbbku5botYTmupDvvJrlpLHotKXml7blm57pgIAgKi8KICBlLnJlc3BvbmRXaXRoKAogICAgY2FjaGVzLm1hdGNoKGUucmVxdWVzdCkudGhlbigoaGl0KSA9PiBoaXQgfHwgZmV0Y2goZS5yZXF1ZXN0KS50aGVuKChyZXMpID0+IHsKICAgICAgY29uc3QgY29weSA9IHJlcy5jbG9uZSgpOwogICAgICBjYWNoZXMub3BlbihDQUNIRSkudGhlbigoYykgPT4gYy5wdXQoZS5yZXF1ZXN0LCBjb3B5KSkuY2F0Y2goKCkgPT4ge30pOwogICAgICByZXR1cm4gcmVzOwogICAgfSkuY2F0Y2goKCkgPT4gaGl0KSkKICApOwp9KTsK
+const CACHE = "fz-v2";
+const ASSETS = ["./", "./index.html", "./manifest.webmanifest", "./icon-180.png", "./icon-192.png", "./icon-512.png"];
+
+self.addEventListener("install", (e) => {
+  e.waitUntil(caches.open(CACHE).then((c) => c.addAll(ASSETS)).then(() => self.skipWaiting()));
+});
+
+self.addEventListener("activate", (e) => {
+  e.waitUntil(
+    caches.keys().then((keys) => Promise.all(keys.filter((k) => k !== CACHE).map((k) => caches.delete(k)))).then(() => self.clients.claim())
+  );
+});
+
+self.addEventListener("fetch", (e) => {
+  if (e.request.method !== "GET") return;
+  const isPage = e.request.mode === "navigate" || (e.request.destination === "" && e.request.url.endsWith("/"));
+  if (isPage) {
+    /* 页面：网络优先，离线兜底缓存（保证发版后用户能拿到新版本） */
+    e.respondWith(
+      fetch(e.request).then((res) => {
+        const copy = res.clone();
+        caches.open(CACHE).then((c) => c.put(e.request, copy)).catch(() => {});
+        return res;
+      }).catch(() => caches.match(e.request, { ignoreSearch: true }).then((hit) => hit || caches.match("./index.html")))
+    );
+    return;
+  }
+  /* 带哈希的资源：缓存优先；其他资源：失败时回退 */
+  e.respondWith(
+    caches.match(e.request).then((hit) => hit || fetch(e.request).then((res) => {
+      const copy = res.clone();
+      caches.open(CACHE).then((c) => c.put(e.request, copy)).catch(() => {});
+      return res;
+    }).catch(() => hit))
+  );
+});
